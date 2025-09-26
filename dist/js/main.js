@@ -404,21 +404,101 @@
             ]
         };
 
-        // App state
-        let currentState = {
-            currentModule: 0,
-            currentQuestion: 0,
-            userAnswers: [],
-            userName: "Learner",
-            courseProgress: JSON.parse(localStorage.getItem('digitalLiteracyCourseProgress')) || {
-                modulesCompleted: 0,
-                quizzesPassed: 0,
-                moduleStatus: Array(5).fill(false),
-                quizStatus: Array(5).fill(false)
-            }
-        };
+        // App state 
+let currentState = {
+    currentModule: 0,
+    currentQuestion: 0,
+    userAnswers: [],
+    userName: localStorage.getItem('digitalLiteracyUserName') || '',
+    courseProgress: JSON.parse(localStorage.getItem('digitalLiteracyCourseProgress')) || {
+        modulesCompleted: 0,
+        quizzesPassed: 0,
+        moduleStatus: Array(5).fill(false),
+        quizStatus: Array(5).fill(false)
+    }
+};
 
-                // Update progress display
+// Initialize the app - REPLACE this function
+document.addEventListener('DOMContentLoaded', function() {
+    // Set up event listeners
+    document.getElementById('username-form').addEventListener('submit', handleUsernameSubmit);
+    document.getElementById('cancel-modal-btn').addEventListener('click', cancelUsernameModal);
+    document.getElementById('start-course-btn').addEventListener('click', showUsernameModal);
+    document.getElementById('continue-course-btn').addEventListener('click', closeQuizResults);
+    document.getElementById('retry-quiz-btn').addEventListener('click', retryQuiz);
+    document.getElementById('review-module-btn').addEventListener('click', reviewModule);
+    document.getElementById('next-question-btn').addEventListener('click', nextQuestion);
+    document.getElementById('download-pdf-btn').addEventListener('click', downloadCertificate);
+    document.getElementById('share-certificate-btn').addEventListener('click', shareCertificate);
+    document.getElementById('back-to-course-btn').addEventListener('click', backToCourse);
+    
+    document.getElementById('username-modal').classList.add('hidden');
+
+    // Check if user already has a name and progress
+    if (currentState.userName) {
+        document.getElementById('user-name').textContent = currentState.userName;
+        
+        if (currentState.courseProgress.quizzesPassed === 5) {
+            showCertificate();
+        } else {
+            showWelcome();
+        }
+    } else {
+        // New user - show welcome screen first
+        showWelcome();
+    }
+    
+    // Update progress display
+    updateProgressDisplay();
+});
+
+// NEW FUNCTION: Show username modal when Start Course is clicked
+function showUsernameModal() {
+    document.getElementById('username-modal').classList.remove('hidden');
+    document.getElementById('user-name-input').value = '';
+    document.getElementById('user-name-input').focus();
+}
+
+// UPDATED FUNCTION: Handle username submission
+function handleUsernameSubmit(event) {
+    event.preventDefault();
+    
+    const nameInput = document.getElementById('user-name-input');
+    let userName = nameInput.value.trim();
+    
+    if (userName === '') {
+        alert('Please enter your name to continue.');
+        return;
+    }
+    
+    if (userName.length < 2) {
+        alert('Please enter a valid name (at least 2 characters).');
+        return;
+    }
+    
+    // Save username to state and localStorage
+    currentState.userName = userName;
+    localStorage.setItem('digitalLiteracyUserName', userName);
+    
+    // Update the displayed name
+    document.getElementById('user-name').textContent = userName;
+    
+    // Hide modal and start the course
+    document.getElementById('username-modal').classList.add('hidden');
+    startCourse(); // This will show the course dashboard
+}
+    
+
+function cancelUsernameModal() {
+    document.getElementById('username-modal').classList.add('hidden');
+    document.getElementById('user-name-input').value = '';
+}
+
+function showError(message) {
+    alert(message);
+}
+
+// Update progress display
 function updateProgressDisplay() {
     const progress = currentState.courseProgress;
     const totalModules = 5;
@@ -464,41 +544,28 @@ function updateProgressDisplay() {
     }
 }
 
-        // Initialize the app
-        document.addEventListener('DOMContentLoaded', function() {
-            // Set up event listeners
-            document.getElementById('start-course-btn').addEventListener('click', startCourse);
-            document.getElementById('continue-course-btn').addEventListener('click', closeQuizResults);
-            document.getElementById('retry-quiz-btn').addEventListener('click', retryQuiz);
-            document.getElementById('review-module-btn').addEventListener('click', reviewModule);
-            document.getElementById('next-question-btn').addEventListener('click', nextQuestion);
-            document.getElementById('download-pdf-btn').addEventListener('click', downloadCertificate);
-            document.getElementById('share-certificate-btn').addEventListener('click', shareCertificate);
-            document.getElementById('back-to-course-btn').addEventListener('click', backToCourse);
-            
-            // Check if user has already completed the course
-            if (currentState.courseProgress.quizzesPassed === 5) {
-                showCertificate();
-            } else {
-                showWelcome();
-            }
-            
-            // Update progress display
-            updateProgressDisplay();
-        });
+        
 
         // Show welcome screen
         function showWelcome() {
             document.getElementById('welcome-section').classList.remove('hidden');
             document.getElementById('course-dashboard').classList.add('hidden');
             document.getElementById('certificate-section').classList.add('hidden');
+            document.getElementById('username-modal').classList.add('hidden');
         }
 
-        // Start the course
+        // Start the course 
         function startCourse() {
+            // If user doesn't have a name yet, show the modal instead
+            if (!currentState.userName) {
+                showUsernameModal();
+                return;
+            }
+            
             document.getElementById('welcome-section').classList.add('hidden');
             document.getElementById('course-dashboard').classList.remove('hidden');
             document.getElementById('certificate-section').classList.add('hidden');
+            document.getElementById('username-modal').classList.add('hidden');
             
             renderModules();
             showModule(0);
@@ -569,7 +636,7 @@ function updateProgressDisplay() {
                     <div class="content-card">
                         <div class="flex items-center">
                             <i class="fas fa-info-circle text-${module.color} mr-2"></i>
-                            <span class="font-nunito">Complete all sections and pass the quiz to finish this module</span>
+                            <span class="font-poppins">Complete all sections and pass the quiz to finish this module</span>
                         </div>
                     </div>
             `;
@@ -799,8 +866,9 @@ function updateProgressDisplay() {
             document.getElementById('welcome-section').classList.add('hidden');
             document.getElementById('course-dashboard').classList.add('hidden');
             document.getElementById('certificate-section').classList.remove('hidden');
+            document.getElementById('username-modal').classList.add('hidden');
             
-            // Set certificate details
+            // Set certificate details with the stored username
             document.getElementById('certificate-name').textContent = currentState.userName;
             document.getElementById('certificate-date').textContent = new Date().toLocaleDateString('en-US', {
                 year: 'numeric',

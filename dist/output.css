@@ -10,6 +10,9 @@
     --color-green-50: oklch(98.2% 0.018 155.826);
     --color-green-500: oklch(72.3% 0.219 149.579);
     --color-green-600: oklch(62.7% 0.194 149.214);
+    --color-gray-300: oklch(87.2% 0.01 258.338);
+    --color-gray-400: oklch(70.7% 0.022 261.325);
+    --color-gray-800: oklch(27.8% 0.033 256.848);
     --color-black: #000;
     --color-white: #fff;
     --spacing: 0.25rem;
@@ -312,6 +315,9 @@
   .ml-2 {
     margin-left: calc(var(--spacing) * 2);
   }
+  .block {
+    display: block;
+  }
   .flex {
     display: flex;
   }
@@ -524,6 +530,9 @@
   .bg-charcoal {
     background-color: var(--color-charcoal);
   }
+  .bg-gray-300 {
+    background-color: var(--color-gray-300);
+  }
   .bg-green-50 {
     background-color: var(--color-green-50);
   }
@@ -611,6 +620,10 @@
     font-size: var(--text-4xl);
     line-height: var(--tw-leading, var(--text-4xl--line-height));
   }
+  .text-5xl {
+    font-size: var(--text-5xl);
+    line-height: var(--tw-leading, var(--text-5xl--line-height));
+  }
   .text-6xl {
     font-size: var(--text-6xl);
     line-height: var(--tw-leading, var(--text-6xl--line-height));
@@ -654,6 +667,9 @@
   }
   .text-deepBlue {
     color: var(--color-deepBlue);
+  }
+  .text-gray-800 {
+    color: var(--color-gray-800);
   }
   .text-green-600 {
     color: var(--color-green-600);
@@ -709,6 +725,29 @@
       @media (hover: hover) {
         background-color: var(--color-deepBlue);
       }
+    }
+  }
+  .hover\:bg-gray-400 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-gray-400);
+      }
+    }
+  }
+  .focus\:border-transparent {
+    &:focus {
+      border-color: transparent;
+    }
+  }
+  .focus\:ring-2 {
+    &:focus {
+      --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+  }
+  .focus\:ring-calmBlue {
+    &:focus {
+      --tw-ring-color: var(--color-calmBlue);
     }
   }
   .md\:w-1\/3 {
