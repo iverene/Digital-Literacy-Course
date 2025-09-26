@@ -423,7 +423,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Set up event listeners
     document.getElementById('username-form').addEventListener('submit', handleUsernameSubmit);
     document.getElementById('cancel-modal-btn').addEventListener('click', cancelUsernameModal);
-    document.getElementById('start-course-btn').addEventListener('click', showUsernameModal);
+    document.getElementById('start-course-btn').addEventListener('click', startCourse);
     document.getElementById('continue-course-btn').addEventListener('click', closeQuizResults);
     document.getElementById('retry-quiz-btn').addEventListener('click', retryQuiz);
     document.getElementById('review-module-btn').addEventListener('click', reviewModule);
@@ -452,97 +452,97 @@ document.addEventListener('DOMContentLoaded', function() {
     updateProgressDisplay();
 });
 
-// NEW FUNCTION: Show username modal when Start Course is clicked
-function showUsernameModal() {
-    document.getElementById('username-modal').classList.remove('hidden');
-    document.getElementById('user-name-input').value = '';
-    document.getElementById('user-name-input').focus();
-}
-
-// UPDATED FUNCTION: Handle username submission
-function handleUsernameSubmit(event) {
-    event.preventDefault();
-    
-    const nameInput = document.getElementById('user-name-input');
-    let userName = nameInput.value.trim();
-    
-    if (userName === '') {
-        alert('Please enter your name to continue.');
-        return;
-    }
-    
-    if (userName.length < 2) {
-        alert('Please enter a valid name (at least 2 characters).');
-        return;
-    }
-    
-    // Save username to state and localStorage
-    currentState.userName = userName;
-    localStorage.setItem('digitalLiteracyUserName', userName);
-    
-    // Update the displayed name
-    document.getElementById('user-name').textContent = userName;
-    
-    // Hide modal and start the course
-    document.getElementById('username-modal').classList.add('hidden');
-    startCourse(); // This will show the course dashboard
-}
-    
-
-function cancelUsernameModal() {
-    document.getElementById('username-modal').classList.add('hidden');
-    document.getElementById('user-name-input').value = '';
-}
-
-function showError(message) {
-    alert(message);
-}
-
-// Update progress display
-function updateProgressDisplay() {
-    const progress = currentState.courseProgress;
-    const totalModules = 5;
-    const completedPercent = Math.round((progress.quizzesPassed / totalModules) * 100);
-    
-    // Update progress ring
-    const progressRing = document.getElementById('progress-ring');
-    if (progressRing) {
-        const circumference = 2 * Math.PI * 40;
-        const offset = circumference - (completedPercent / 100) * circumference;
-        progressRing.style.strokeDashoffset = offset;
-    }
-    
-    // Update progress text
-    const progressPercent = document.getElementById('progress-percent');
-    if (progressPercent) {
-        progressPercent.textContent = `${completedPercent}%`;
-    }
-    
-    const completedModules = document.getElementById('completed-modules');
-    if (completedModules) {
-        completedModules.textContent = progress.modulesCompleted;
-    }
-    
-    const passedQuizzes = document.getElementById('passed-quizzes');
-    if (passedQuizzes) {
-        passedQuizzes.textContent = progress.quizzesPassed;
-    }
-    
-
-    const progressIndicator = document.getElementById('progress-indicator');
-    if (progressIndicator) {
-        progressIndicator.innerHTML = `<span class="text-white text-sm font-medium font-poppins">${completedPercent}% Complete</span>`;
-        
-        // Also update the background color based on progress
-        if (completedPercent === 0) {
-            progressIndicator.className = 'flex items-center bg-white bg-opacity-20 px-3 py-1 rounded-full';
-        } else if (completedPercent === 100) {
-            progressIndicator.className = 'flex items-center bg-green-500 bg-opacity-80 px-3 py-1 rounded-full';
-        } else {
-            progressIndicator.className = 'flex items-center bg-calmBlue bg-opacity-80 px-3 py-1 rounded-full';
+        // Show username modal when Start Course is clicked
+        function showUsernameModal() {
+            document.getElementById('username-modal').classList.remove('hidden');
+            document.getElementById('user-name-input').value = currentState.userName || '';
+            document.getElementById('user-name-input').focus();
         }
-    }
-}
+
+        // Handle username submission
+        function handleUsernameSubmit(event) {
+            event.preventDefault();
+            
+            const nameInput = document.getElementById('user-name-input');
+            let userName = nameInput.value.trim();
+            
+            if (userName === '') {
+                alert('Please enter your name to continue.');
+                return;
+            }
+            
+            if (userName.length < 2) {
+                alert('Please enter a valid name (at least 2 characters).');
+                return;
+            }
+            
+            // Save username to state and localStorage
+            currentState.userName = userName;
+            localStorage.setItem('digitalLiteracyUserName', userName);
+            
+            // Update the displayed name
+            document.getElementById('user-name').textContent = userName;
+            
+            // Hide modal and start the course
+            document.getElementById('username-modal').classList.add('hidden');
+            startCourse(); // This will show the course dashboard
+        }
+            
+
+        function cancelUsernameModal() {
+            document.getElementById('username-modal').classList.add('hidden');
+            document.getElementById('user-name-input').value = '';
+        }
+
+        function showError(message) {
+            alert(message);
+        }
+
+        // Update progress display
+        function updateProgressDisplay() {
+            const progress = currentState.courseProgress;
+            const totalModules = 5;
+            const completedPercent = Math.round((progress.quizzesPassed / totalModules) * 100);
+            
+            // Update progress ring
+            const progressRing = document.getElementById('progress-ring');
+            if (progressRing) {
+                const circumference = 2 * Math.PI * 40;
+                const offset = circumference - (completedPercent / 100) * circumference;
+                progressRing.style.strokeDashoffset = offset;
+            }
+            
+            // Update progress text
+            const progressPercent = document.getElementById('progress-percent');
+            if (progressPercent) {
+                progressPercent.textContent = `${completedPercent}%`;
+            }
+            
+            const completedModules = document.getElementById('completed-modules');
+            if (completedModules) {
+                completedModules.textContent = progress.modulesCompleted;
+            }
+            
+            const passedQuizzes = document.getElementById('passed-quizzes');
+            if (passedQuizzes) {
+                passedQuizzes.textContent = progress.quizzesPassed;
+            }
+            
+
+            const progressIndicator = document.getElementById('progress-indicator');
+            if (progressIndicator) {
+                progressIndicator.innerHTML = `<span class="text-white text-sm font-medium font-poppins">${completedPercent}% Complete</span>`;
+                
+                // Also update the background color based on progress
+                if (completedPercent === 0) {
+                    progressIndicator.className = 'flex items-center bg-white bg-opacity-20 px-3 py-1 rounded-full';
+                } else if (completedPercent === 100) {
+                    progressIndicator.className = 'flex items-center bg-green-500 bg-opacity-80 px-3 py-1 rounded-full';
+                } else {
+                    progressIndicator.className = 'flex items-center bg-calmBlue bg-opacity-80 px-3 py-1 rounded-full';
+                }
+            }
+        }
 
         
 
@@ -556,19 +556,20 @@ function updateProgressDisplay() {
 
         // Start the course 
         function startCourse() {
-            // If user doesn't have a name yet, show the modal instead
-            if (!currentState.userName) {
+            // Check if user already has a name stored
+            if (currentState.userName && currentState.userName.trim() !== '') {
+                // User has a name, proceed directly to course
+                document.getElementById('welcome-section').classList.add('hidden');
+                document.getElementById('course-dashboard').classList.remove('hidden');
+                document.getElementById('certificate-section').classList.add('hidden');
+                document.getElementById('username-modal').classList.add('hidden');
+                
+                renderModules();
+                showModule(0);
+            } else {
+                // User doesn't have a name, show the modal
                 showUsernameModal();
-                return;
             }
-            
-            document.getElementById('welcome-section').classList.add('hidden');
-            document.getElementById('course-dashboard').classList.remove('hidden');
-            document.getElementById('certificate-section').classList.add('hidden');
-            document.getElementById('username-modal').classList.add('hidden');
-            
-            renderModules();
-            showModule(0);
         }
 
         // Render modules list
