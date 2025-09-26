@@ -1,0 +1,104 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css');
+@import url('https://fonts.googleapis.com');
+@import url('https://fonts.gstatic.com');
+
+@layer base {
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: poppins, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: raleway, sans-serif;
+    }
+}
+
+@theme {
+    --font-raleway: "Raleway", sans-serif;
+    --font-poppins: "Poppins", sans-serif;
+
+    --color-calmBlue: #5DADEC;
+    --color-deepBlue: #2C3E50;
+    --color-pastelPink: #F7A8B8;
+    --color-offWhite: #FAFAFA;
+    --color-lightGray: #EAEAEA;
+    --color-charcoal: #333333;
+
+    --color-skyPastel: #a7d8ff;
+    --color-lavenderPastel: #c7ceea;
+}
+
+@layer components {
+  .active {
+                @apply text-deepBlue font-bold;
+            }
+            
+            .cards {
+                @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 p-8;
+            }
+
+            .card {
+                @apply bg-lightGray shadow-lg border border-calmBlue rounded-2xl p-5 
+                       flex flex-col items-center text-center 
+                       hover:shadow-2xl transition-shadow duration-300;
+            }
+            
+            .module-card {
+                transition: all 0.3s ease;
+                font-family: poppins, sans-serif;
+            }
+            
+            .module-card:hover {
+                transform: translateY(-5px);
+            }
+            
+            .progress-ring {
+                transition: stroke-dashoffset 0.5s ease;
+            }
+            
+            .quiz-option {
+                transition: all 0.2s ease;
+                font-family: poppins, sans-serif;
+            }
+            
+            .quiz-option:hover {
+                background-color: theme('colors.skyPastel');
+            }
+            
+            .certificate {
+                background: linear-gradient(135deg, theme('colors.offWhite') 0%, theme('colors.lavenderPastel') 100%);
+                border: 15px solid theme('colors.calmBlue');
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                font-family: theme('fontFamily.raleway');
+            }
+            
+            .nav-gradient {
+                background: linear-gradient(90deg, theme('colors.deepBlue') 0%, theme('colors.calmBlue') 100%);
+            }
+            
+            .btn-primary {
+                @apply bg-calmBlue hover:bg-deepBlue text-white font-bold py-3 px-6 rounded-lg transition duration-300;
+                font-family: theme('fontFamily.poppins');
+            }
+            
+            .btn-secondary {
+                @apply bg-pastelPink hover:bg-deepBlue text-white font-bold py-3 px-6 rounded-lg transition duration-300;
+                font-family: theme('fontFamily.poppins');
+            }
+            
+            .section-card {
+                @apply bg-white rounded-2xl shadow-lg p-8 mb-8 border border-lightGray;
+            }
+            
+            .content-card {
+                @apply bg-lightGray p-6 rounded-xl mb-6 border border-skyPastel;
+            }
+            
+            .icon-circle {
+                @apply w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4;
+            }
+}
+
