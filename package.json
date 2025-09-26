@@ -2,7 +2,8 @@
   "name": "digital-literacy-course",
   "version": "1.0.0",
   "scripts": {
-    "dev": "npx live-server dist --port=3000"
+    "dev": "npx live-server dist --port=3000",
+    "build": "echo 'No build step needed'"
   },
   "devDependencies": {
     "live-server": "^1.2.2"
