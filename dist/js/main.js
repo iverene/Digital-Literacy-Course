@@ -245,7 +245,7 @@
                     id: 4,
                     title: "Online Safety",
                     icon: "fas fa-shield-alt",
-                    color: "deepBlue",
+                    color: "calmBlue",
                     completed: false,
                     quizPassed: false,
                     content: {
