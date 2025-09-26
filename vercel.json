@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "public": true,
   "builds": [
-    { "src": "dist/**/*", "use": "@vercel/static" }
+    {
+      "src": "dist/**/*",
+      "use": "@vercel/static"
+    }
   ]
 }
+
 
